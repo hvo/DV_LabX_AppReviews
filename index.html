@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://fb.me/react-with-addons-15.1.0.js"></script>
+  <script src="https://fb.me/react-dom-15.1.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+
+<div id="ui"></div>
+<div id="vis"></div>
+
+<script type="text/babel">
+class AppSelectingForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      platform: 'ios',
+      rating: 5,
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
+  handleSubmit(event) {
+    var spec = `/vis/${this.state.platform}/${this.state.rating}`;
+    vegaEmbed('#vis', spec, {actions:false});
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          App Selection &nbsp; <br />
+          Platform &nbsp; 
+          <select 
+            name="platform"
+            value={this.state.platform} 
+            onChange={this.handleChange}>
+            <option value="ios">iOS</option>
+            <option value="android">Android</option>
+          </select>
+          &nbsp; &nbsp; 
+          Rating &nbsp; 
+          <select 
+            name="rating"
+            value={this.state.rating} 
+            onChange={this.handleChange}>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          &nbsp; &nbsp; 
+        </label>
+        <input type="submit" value="Update" />
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(
+  <div>
+    <AppSelectingForm />
+  </div>,
+  document.getElementById('ui')
+);
+</script>
+</body>
+</html>
